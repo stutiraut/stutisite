@@ -23,35 +23,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '852s38&n0sgol3(0dmg$br*uclqk3*v+#*33=a*(ot@q=!d14&'
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = ['*']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd8ooen9nr2tagm',
-        'USER':'udqnidhbngellv',
-        'PASSWORD':'7d257fbd8a2693b1198852672e024249b2f8f1e8c148578032ee2864d4c20358',
-        'HOST':'ec2-50-17-194-186.compute-1.amazonaws.com',
-        'PORT':'5432',
+ALLOWED_HOSTS = ['*']
 
-    }
-}
 
-try:
-    from local_settings import *
-except ImportError:
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
-    DATABASES['default'] = dj_database_url.config()
 
-    pass
+
 
 # Application definition
 
@@ -100,7 +81,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'stutisite.wsgi.application'
 
+# Database
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd8ooen9nr2tagm',
+        'USER':'udqnidhbngellv',
+        'PASSWORD':'7d257fbd8a2693b1198852672e024249b2f8f1e8c148578032ee2864d4c20358',
+        'HOST':'ec2-50-17-194-186.compute-1.amazonaws.com',
+        'PORT':'5432',
 
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -138,18 +131,32 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(PROJECT_ROOT, 'static'),
 )
+
+# Update database configuration with $DATABASE_URL.
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+DATABASES['default'] = dj_database_url.config()
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+try:
+    from local_settings import *
+except ImportError:
+
+    pass
 
 
 
